@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>श्री राम मिष्ठान भंडार</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f7f7f7;
+  color:#222;
+}
+
+header{
+  background:#b71c1c;
+  color:white;
+  padding:15px;
+  text-align:center;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+header h1{
+  margin:0;
+  font-size:24px;
+}
+
+header p{
+  margin:5px 0 0;
+}
+
+.search{
+  padding:10px;
+  background:white;
+  position:sticky;
+  top:86px;
+  z-index:9;
+}
+
+#searchBox{
+  width:100%;
+  padding:13px;
+  border:1px solid #ccc;
+  border-radius:10px;
+  font-size:16px;
+}
+
+.categories{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:10px;
+  background:#fff;
+}
+
+.categories button{
+  white-space:nowrap;
+  border:0;
+  background:#eeeeee;
+  padding:11px 15px;
+  border-radius:20px;
+  font-size:15px;
+}
+
+.categories button.active{
+  background:#b71c1c;
+  color:white;
+}
+
+#products{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  padding:12px;
+}
+
+.card{
+  background:white;
+  border-radius:14px;
+  padding:12px;
+  box-shadow:0 2px 8px #ddd;
+  text-align:center;
+}
+
+.photo{
+  font-size:55px;
+  height:75px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.card h3{
+  margin:5px 0;
+  font-size:17px;
+}
+
+.price{
+  color:#b71c1c;
+  font-weight:bold;
+  margin:6px;
+}
+
+.card button{
+  width:100%;
+  border:0;
+  background:#b71c1c;
+  color:white;
+  padding:11px;
+  border-radius:9px;
+  font-size:15px;
+}
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:white;
+  box-shadow:0 -2px 10px #ccc;
+  display:flex;
+  gap:8px;
+  padding:8px;
+  z-index:20;
+}
+
+.bottom button{
+  flex:1;
+  padding:12px 5px;
+  border:0;
+  border-radius:9px;
+  background:#b71c1c;
+  color:white;
+  font-size:14px;
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  z-index:50;
+  overflow:auto;
+}
+
+.modalBox{
+  background:white;
+  width:94%;
+  max-width:500px;
+  margin:30px auto;
+  border-radius:15px;
+  padding:18px;
+}
+
+.modalBox h2{
+  margin-top:0;
+}
+
+.close{
+  float:right;
+  background:#333;
+  color:white;
+  border:0;
+  border-radius:50%;
+  width:32px;
+  height:32px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:12px;
+  margin:6px 0 10px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:15px;
+}
+
+.formBtn{
+  width:100%;
+  padding:13px;
+  border:0;
+  border-radius:9px;
+  background:#b71c1c;
+  color:white;
+  font-size:16px;
+  margin-top:5px;
+}
+
+.cartItem{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 0;
+  border-bottom:1px solid #ddd;
+}
+
+.qty button{
+  padding:5px 10px;
+  border:0;
+  background:#ddd;
+  border-radius:5px;
+}
+
+.ownerItem{
+  border:1px solid #ddd;
+  padding:10px;
+  border-radius:10px;
+  margin:8px 0;
+}
+
+.ownerItem button{
+  padding:8px;
+  border:0;
+  border-radius:6px;
+  margin:3px;
+}
+
+.delete{
+  background:#d32f2f;
+  color:white;
+}
+
+.edit{
+  background:#1976d2;
+  color:white;
+}
+
+.ad{
+  margin:10px 12px;
+  padding:13px;
+  background:#fff3cd;
+  border-radius:10px;
+  text-align:center;
+  font-weight:bold;
+}
+
+.empty{
+  text-align:center;
+  padding:30px;
+  grid-column:1/3;
+}
+
+footer{
+  height:70px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🙏 श्री राम मिष्ठान भंडार</h1>
+  <p>Fresh Fruits • Vegetables • Sweets</p>
+</header>
+
+<div class="search">
+  <input id="searchBox" type="text" placeholder="🔎 फल, सब्जी या मिठाई खोजें...">
+</div>
+
+<div id="adBox" class="ad">
+  🎉 आज का विशेष ऑफर देखें!
+</div>
+
+<div class="categories">
+  <button class="cat active" data-cat="all">🏠 सभी</button>
+  <button class="cat" data-cat="fruit">🍎 फल</button>
+  <button class="cat" data-cat="vegetable">🥕 सब्जियाँ</button>
+  <button class="cat" data-cat="sweet">🍬 मिठाइयाँ</button>
+</div>
+
+<div id="products"></div>
+
+<footer></footer>
+
+<div class="bottom">
+  <button id="cartBtn">🛒 Cart (<span id="cartCount">0</span>)</button>
+  <button id="ownerBtn">🔐 Owner</button>
+</div>
+
+
+<!-- CART MODAL -->
+
+<div id="cartModal" class="modal">
+  <div class="modalBox">
+    <button class="close" id="closeCart">×</button>
+    <h2>🛒 आपका Cart</h2>
+
+    <div id="cartItems"></div>
+
+    <h3>कुल: ₹<span id="total">0</span></h3>
+
+    <hr>
+
+    <h3>📦 Order Details</h3>
+
+    <input id="customerName" placeholder="आपका नाम">
+    <input id="customerPhone" placeholder="मोबाइल नंबर">
+    <textarea id="customerAddress" rows="3" placeholder="पूरा पता"></textarea>
+
+    <button class="formBtn" id="whatsappBtn">
+      📱 WhatsApp पर Order भेजें
+    </button>
+  </div>
+</div>
+
+
+<!-- OWNER LOGIN -->
+
+<div id="loginModal" class="modal">
+  <div class="modalBox">
+    <button class="close" id="closeLogin">×</button>
+    <h2>🔐 Owner Panel Login</h2>
+
+    <input id="ownerPassword" type="password" placeholder="Owner Password">
+
+    <button class="formBtn" id="loginBtn">
+      Login
+    </button>
+  </div>
+</div>
+
+
+<!-- OWNER PANEL -->
+
+<div id="ownerModal" class="modal">
+  <div class="modalBox">
+    <button class="close" id="closeOwner">×</button>
+
+    <h2>👑 Owner Panel</h2>
+
+    <h3>📢 Advertisement</h3>
+
+    <input id="adInput" placeholder="Advertisement लिखें">
+
+    <button class="formBtn" id="saveAdBtn">
+      Advertisement Save करें
+    </button>
+
+    <hr>
+
+    <h3>➕ नया Product जोड़ें</h3>
+
+    <input id="newName" placeholder="Product का नाम">
+
+    <select id="newCategory">
+      <option value="fruit">🍎 फल</option>
+      <option value="vegetable">🥕 सब्जी</option>
+      <option value="sweet">🍬 मिठाई</option>
+    </select>
+
+    <input id="newPrice" type="number" placeholder="Price ₹">
+
+    <input id="newEmoji" placeholder="Emoji जैसे 🍎">
+
+    <button class="formBtn" id="addProductBtn">
+      ➕ Product Add करें
+    </button>
+
+    <hr>
+
+    <h3>📦 Products Manage करें</h3>
+
+    <div id="ownerProducts"></div>
+
+    <hr>
+
+    <button class="formBtn" id="resetBtn">
+      🔄 App Data Reset करें
+    </button>
+
+  </div>
+</div>
+
+
+<script>
+
+/* =========================
+   DEFAULT PRODUCTS
+========================= */
+
+var products = [
+
+/* FRUITS */
+
+{name:"सेब",cat:"fruit",price:120,emoji:"🍎"},
+{name:"केला",cat:"fruit",price:60,emoji:"🍌"},
+{name:"आम",cat:"fruit",price:100,emoji:"🥭"},
+{name:"संतरा",cat:"fruit",price:80,emoji:"🍊"},
+{name:"अंगूर",cat:"fruit",price:100,emoji:"🍇"},
+{name:"अनार",cat:"fruit",price:140,emoji:"🔴"},
+{name:"पपीता",cat:"fruit",price:60,emoji:"🍈"},
+{name:"तरबूज",cat:"fruit",price:40,emoji:"🍉"},
+{name:"खरबूजा",cat:"fruit",price:50,emoji:"🍈"},
+{name:"अमरूद",cat:"fruit",price:70,emoji:"🟢"},
+{name:"नाशपाती",cat:"fruit",price:110,emoji:"🍐"},
+{name:"कीवी",cat:"fruit",price:180,emoji:"🥝"},
+{name:"अनानास",cat:"fruit",price:100,emoji:"🍍"},
+{name:"नारियल",cat:"fruit",price:60,emoji:"🥥"},
+{name:"लीची",cat:"fruit",price:150,emoji:"🔴"},
+{name:"चीकू",cat:"fruit",price:80,emoji:"🟤"},
+{name:"आड़ू",cat:"fruit",price:130,emoji:"🍑"},
+{name:"स्ट्रॉबेरी",cat:"fruit",price:200,emoji:"🍓"},
+{name:"मौसंबी",cat:"fruit",price:90,emoji:"🍊"},
+{name:"नींबू",cat:"fruit",price:80,emoji:"🍋"},
+
+/* VEGETABLES */
+
+{name:"आलू",cat:"vegetable",price:30,emoji:"🥔"},
+{name:"प्याज",cat:"vegetable",price:35,emoji:"🧅"},
+{name:"टमाटर",cat:"vegetable",price:40,emoji:"🍅"},
+{name:"गाजर",cat:"vegetable",price:50,emoji:"🥕"},
+{name:"मटर",cat:"vegetable",price:80,emoji:"🫛"},
+{name:"फूलगोभी",cat:"vegetable",price:50,emoji:"🥦"},
+{name:"पत्तागोभी",cat:"vegetable",price:35,emoji:"🥬"},
+{name:"भिंडी",cat:"vegetable",price:60,emoji:"🫑"},
+{name:"बैंगन",cat:"vegetable",price:45,emoji:"🍆"},
+{name:"शिमला मिर्च",cat:"vegetable",price:80,emoji:"🫑"},
+{name:"खीरा",cat:"vegetable",price:40,emoji:"🥒"},
+{name:"लौकी",cat:"vegetable",price:35,emoji:"🥒"},
+{name:"कद्दू",cat:"vegetable",price:30,emoji:"🎃"},
+{name:"पालक",cat:"vegetable",price:30,emoji:"🌿"},
+{name:"मूली",cat:"vegetable",price:35,emoji:"🥕"},
+{name:"चुकंदर",cat:"vegetable",price:60,emoji:"🔴"},
+{name:"हरी मिर्च",cat:"vegetable",price:70,emoji:"🌶️"},
+{name:"अदरक",cat:"vegetable",price:120,emoji:"🫚"},
+{name:"लहसुन",cat:"vegetable",price:150,emoji:"🧄"},
+{name:"मशरूम",cat:"vegetable",price:180,emoji:"🍄"},
+
+/* SWEETS */
+
+{name:"गुलाब जामुन",cat:"sweet",price:200,emoji:"🍡"},
+{name:"रसगुल्ला",cat:"sweet",price:220,emoji:"⚪"},
+{name:"जलेबी",cat:"sweet",price:180,emoji:"🟠"},
+{name:"मोतीचूर लड्डू",cat:"sweet",price:220,emoji:"🟡"},
+{name:"बेसन लड्डू",cat:"sweet",price:200,emoji:"🟤"},
+{name:"बूंदी लड्डू",cat:"sweet",price:200,emoji:"🟠"},
+{name:"काजू कतली",cat:"sweet",price:700,emoji:"🔶"},
+{name:"बर्फी",cat:"sweet",price:300,emoji:"⬜"},
+{name:"दूध बर्फी",cat:"sweet",price:320,emoji:"⬜"},
+{name:"कलाकंद",cat:"sweet",price:350,emoji:"⬜"},
+{name:"मिल्क केक",cat:"sweet",price:360,emoji:"🍰"},
+{name:"रस मलाई",cat:"sweet",price:300,emoji:"🥛"},
+{name:"सोन पापड़ी",cat:"sweet",price:220,emoji:"🍯"},
+{name:"घेवर",cat:"sweet",price:400,emoji:"🟤"},
+{name:"इमरती",cat:"sweet",price:200,emoji:"🟠"},
+{name:"पेड़ा",cat:"sweet",price:280,emoji:"🟤"},
+{name:"मलाई चाप",cat:"sweet",price:300,emoji:"🍥"},
+{name:"मूंग दाल हलवा",cat:"sweet",price:350,emoji:"🍮"},
+{name:"गाजर का हलवा",cat:"sweet",price:300,emoji:"🥕"},
+{name:"श्रीखंड",cat:"sweet",price:280,emoji:"🥣"}
+
+];
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+var currentCategory = "all";
+var cart = [];
+
+var savedProducts =
+localStorage.getItem("shreeRamProducts");
+
+if(savedProducts){
+  try{
+    products = JSON.parse(savedProducts);
+  }catch(e){
+    localStorage.removeItem("shreeRamProducts");
+  }
+}
+
+
+/* =========================
+   SAVE PRODUCTS
+========================= */
+
+function saveProducts(){
+
+  localStorage.setItem(
+    "shreeRamProducts",
+    JSON.stringify(products)
+  );
+
+}
+
+
+/* =========================
+   DISPLAY PRODUCTS
+========================= */
+
+function displayProducts(){
+
+  var box = document.getElementById("products");
+
+  var search =
+  document.getElementById("searchBox").value
+  .toLowerCase();
+
+  box.innerHTML = "";
+
+  var found = 0;
+
+  for(var i=0;i<products.length;i++){
+
+    var p = products[i];
+
+    if(
+      (currentCategory === "all" ||
+       p.cat === currentCategory)
+      &&
+      p.name.toLowerCase().indexOf(search) !== -1
+    ){
+
+      found++;
+
+      var card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML =
+      '<div class="photo">'+p.emoji+'</div>' +
+      '<h3>'+p.name+'</h3>' +
+      '<div class="price">₹'+p.price+' / kg</div>' +
+      '<button class="addBtn">🛒 Cart में जोड़ें</button>';
+
+      (function(index){
+
+        card.querySelector(".addBtn")
+        .addEventListener("click",function(){
+
+          addToCart(index);
+
+        });
+
+      })(i);
+
+      box.appendChild(card);
+
+    }
+
+  }
+
+  if(found === 0){
+
+    box.innerHTML =
+    '<div class="empty">😔 Product नहीं मिला</div>';
+
+  }
+
+}
+
+
+/* =========================
+   CART
+========================= */
+
+function addToCart(index){
+
+  var p = products[index];
+
+  var existing = null;
+
+  for(var i=0;i<cart.length;i++){
+
+    if(cart[i].index === index){
+      existing = cart[i];
+      break;
+    }
+
+  }
+
+  if(existing){
+
+    existing.qty++;
+
+  }else{
+
+    cart.push({
+      index:index,
+      qty:1
+    });
+
+  }
+
+  updateCart();
+
+  alert(p.name + " Cart में जोड़ दिया गया!");
+
+}
+
+
+function updateCart(){
+
+  var count = 0;
+  var total = 0;
+
+  for(var i=0;i<cart.length;i++){
+
+    count += cart[i].qty;
+
+    total +=
+    products[cart[i].index].price *
+    cart[i].qty;
+
+  }
+
+  document.getElementById("cartCount")
+  .innerText = count;
+
+  document.getElementById("total")
+  .innerText = total;
+
+  displayCart();
+
+}
+
+
+function displayCart(){
+
+  var box =
+  document.getElementById("cartItems");
+
+  box.innerHTML = "";
+
+  if(cart.length === 0){
+
+    box.innerHTML =
+    "<p>🛒 आपका Cart खाली है।</p>";
+
+    return;
+
+  }
+
+  for(var i=0;i<cart.length;i++){
+
+    var item = cart[i];
+
+    var p = products[item.index];
+
+    var div =
+    document.createElement("div");
+
+    div.className = "cartItem";
+
+    div.innerHTML =
+    '<div>' +
+    '<b>'+p.emoji+' '+p.name+'</b><br>' +
+    '₹'+p.price+' × '+item.qty +
+    '</div>' +
+
+    '<div class="qty">' +
+    '<button class="minus">−</button> ' +
+    item.qty +
+    ' <button class="plus">+</button>' +
+    '</div>';
+
+    (function(cartIndex){
+
+      div.querySelector(".minus")
+      .addEventListener("click",function(){
+
+        if(cart[cartIndex].qty > 1){
+          cart[cartIndex].qty--;
+        }else{
+          cart.splice(cartIndex,1);
+        }
+
+        updateCart();
+
+      });
+
+
+      div.querySelector(".plus")
+      .addEventListener("click",function(){
+
+        cart[cartIndex].qty++;
+
+        updateCart();
+
+      });
+
+    })(i);
+
+    box.appendChild(div);
+
+  }
+
+}
+
+
+/* =========================
+   CATEGORY
+========================= */
+
+var categoryButtons =
+document.querySelectorAll(".cat");
+
+for(var c=0;c<categoryButtons.length;c++){
+
+  categoryButtons[c]
+  .addEventListener("click",function(){
+
+    for(var j=0;j<categoryButtons.length;j++){
+      categoryButtons[j]
+      .classList.remove("active");
+    }
+
+    this.classList.add("active");
+
+    currentCategory =
+    this.getAttribute("data-cat");
+
+    displayProducts();
+
+  });
+
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+document.getElementById("searchBox")
+.addEventListener("input",function(){
+
+  displayProducts();
+
+});
+
+
+/* =========================
+   CART OPEN
+========================= */
+
+document.getElementById("cartBtn")
+.addEventListener("click",function(){
+
+  document.getElementById("cartModal")
+  .style.display = "block";
+
+  updateCart();
+
+});
+
+
+document.getElementById("closeCart")
+.addEventListener("click",function(){
+
+  document.getElementById("cartModal")
+  .style.display = "none";
+
+});
+
+
+/* =========================
+   WHATSAPP ORDER
+========================= */
+
+document.getElementById("whatsappBtn")
+.addEventListener("click",function(){
+
+  if(cart.length === 0){
+
+    alert("पहले Cart में Product जोड़ें।");
+    return;
+
+  }
+
+  var name =
+  document.getElementById("customerName").value;
+
+  var phone =
+  document.getElementById("customerPhone").value;
+
+  var address =
+  document.getElementById("customerAddress").value;
+
+  if(name === "" || phone === "" || address === ""){
+
+    alert("कृपया नाम, मोबाइल और पता भरें।");
+    return;
+
+  }
+
+  var message =
+  "🙏 श्री राम मिष्ठान भंडार Order%0A%0A";
+
+  message +=
+  "नाम: " + name + "%0A";
+
+  message +=
+  "मोबाइल: " + phone + "%0A";
+
+  message +=
+  "पता: " + address + "%0A%0A";
+
+  message += "🛒 Order:%0A";
+
+  var total = 0;
+
+  for(var i=0;i<cart.length;i++){
+
+    var p =
+    products[cart[i].index];
+
+    var amount =
+    p.price * cart[i].qty;
+
+    total += amount;
+
+    message +=
+    p.name +
+    " × " +
+    cart[i].qty +
+    " = ₹" +
+    amount +
+    "%0A";
+
+  }
+
+  message +=
+  "%0A💰 Total: ₹" + total;
+
+  var url =
+  "https://wa.me/919784942808?text=" +
+  message;
+
+  window.location.href = url;
+
+});
+
+
+/* =========================
+   OWNER LOGIN
+========================= */
+
+document.getElementById("ownerBtn")
+.addEventListener("click",function(){
+
+  document.getElementById("loginModal")
+  .style.display = "block";
+
+});
+
+
+document.getElementById("closeLogin")
+.addEventListener("click",function(){
+
+  document.getElementById("loginModal")
+  .style.display = "none";
+
+});
+
+
+document.getElementById("loginBtn")
+.addEventListener("click",function(){
+
+  var pass =
+  document.getElementById("ownerPassword").value;
+
+  if(pass === "RMB 12345"){
+
+    document.getElementById("loginModal")
+    .style.display = "none";
+
+    document.getElementById("ownerModal")
+    .style.display = "block";
+
+    document.getElementById("ownerPassword")
+    .value = "";
+
+    loadOwnerProducts();
+
+  }else{
+
+    alert("❌ Password गलत है!");
+
+  }
+
+});
+
+
+/* =========================
+   CLOSE OWNER
+========================= */
+
+document.getElementById("closeOwner")
+.addEventListener("click",function(){
+
+  document.getElementById("ownerModal")
+  .style.display = "none";
+
+});
+
+
+/* =========================
+   ADD PRODUCT
+========================= */
+
+document.getElementById("addProductBtn")
+.addEventListener("click",function(){
+
+  var name =
+  document.getElementById("newName").value.trim();
+
+  var cat =
+  document.getElementById("newCategory").value;
+
+  var price =
+  Number(document.getElementById("newPrice").value);
+
+  var emoji =
+  document.getElementById("newEmoji").value.trim();
+
+  if(name === "" || price <= 0){
+
+    alert("Product name और सही price भरें।");
+    return;
+
+  }
+
+  if(emoji === ""){
+    emoji = "🛍️";
+  }
+
+  products.push({
+    name:name,
+    cat:cat,
+    price:price,
+    emoji:emoji
+  });
+
+  saveProducts();
+
+  document.getElementById("newName").value = "";
+  document.getElementById("newPrice").value = "";
+  document.getElementById("newEmoji").value = "";
+
+  displayProducts();
+  loadOwnerProducts();
+
+  alert("✅ Product सफलतापूर्वक Add हो गया!");
+
+});
+
+
+/* =========================
+   OWNER PRODUCT LIST
+========================= */
+
+function loadOwnerProducts(){
+
+  var box =
+  document.getElementById("ownerProducts");
+
+  box.innerHTML = "";
+
+  for(var i=0;i<products.length;i++){
+
+    var p = products[i];
+
+    var div =
+    document.createElement("div");
+
+    div.className = "ownerItem";
+
+    div.innerHTML =
+    "<b>"+p.emoji+" "+p.name+"</b>" +
+    "<br>₹"+p.price+" / kg" +
+    "<br>" +
+
+    '<button class="edit">✏️ Edit</button>' +
+    '<button class="delete">🗑️ Delete</button>';
+
+    (function(index){
+
+      div.querySelector(".delete")
+      .addEventListener("click",function(){
+
+        if(confirm("क्या यह Product Delete करना है?")){
+
+          products.splice(index,1);
+
+          saveProducts();
+
+          displayProducts();
+          loadOwnerProducts();
+
+        }
+
+      });
+
+
+      div.querySelector(".edit")
+      .addEventListener("click",function(){
+
+        var newName =
+        prompt(
+          "Product का नाम:",
+          products[index].name
+        );
+
+        if(newName === null) return;
+
+        var newPrice =
+        prompt(
+          "Price:",
+          products[index].price
+        );
+
+        if(newPrice === null) return;
+
+        if(newName.trim() === "" ||
+           Number(newPrice) <= 0){
+
+          alert("सही जानकारी डालें।");
+          return;
+
+        }
+
+        products[index].name =
+        newName.trim();
+
+        products[index].price =
+        Number(newPrice);
+
+        saveProducts();
+
+        displayProducts();
+        loadOwnerProducts();
+
+        alert("✅ Product Update हो गया!");
+
+      });
+
+    })(i);
+
+    box.appendChild(div);
+
+  }
+
+}
+
+
+/* =========================
+   ADVERTISEMENT
+========================= */
+
+var savedAd =
+localStorage.getItem("shreeRamAd");
+
+if(savedAd){
+
+  document.getElementById("adBox")
+  .innerText = savedAd;
+
+  document.getElementById("adInput")
+  .value = savedAd;
+
+}
+
+
+document.getElementById("saveAdBtn")
+.addEventListener("click",function(){
+
+  var ad =
+  document.getElementById("adInput")
+  .value.trim();
+
+  if(ad === ""){
+
+    alert("Advertisement लिखें।");
+    return;
+
+  }
+
+  localStorage.setItem(
+    "shreeRamAd",
+    ad
+  );
+
+  document.getElementById("adBox")
+  .innerText = ad;
+
+  alert("✅ Advertisement Save हो गया!");
+
+});
+
+
+/* =========================
+   RESET
+========================= */
+
+document.getElementById("resetBtn")
+.addEventListener("click",function(){
+
+  var ok =
+  confirm(
+    "क्या आप सभी custom changes हटाकर App को Default करना चाहते हैं?"
+  );
+
+  if(!ok) return;
+
+  localStorage.removeItem("shreeRamProducts");
+  localStorage.removeItem("shreeRamAd");
+
+  location.reload();
+
+});
+
+
+/* =========================
+   START APP
+========================= */
+
+displayProducts();
+updateCart();
+
+</script>
+
+</body>
+      </html>
